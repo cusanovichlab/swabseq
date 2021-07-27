@@ -53,7 +53,7 @@ colnames(test.wide)[1] = "Index"
 colnames(test.wide)[2] = "Index1"
 colnames(test.wide)[3] = "Index2"
 
-test.wide.40 = read.table("RNA_samples_wide_mat.txt",header=T)
+test.wide.40 = read.table("S3_RNA_samples_wide_mat.tds",header=T)
 test.wide.40$Ct_N1[test.wide.40$Ct_N1 == "Undetermined"] = 46
 test.wide.40$Ct_N2[test.wide.40$Ct_N2 == "Undetermined"] = 46
 test.wide.40$Ct_RPP30[test.wide.40$Ct_RPP30 == "Undetermined"] = 46
@@ -96,20 +96,20 @@ test.wide.subjects %>%
   annotation_logticks(base = 2, sides = "b")
 dev.off()
 
-#N1-positives with an R2  = 0.91
+#N1-positives with a Pearson's r  = -0.95 (p-value = 3.9x10-31)
 tester2 = test.wide.subjects[which(as.numeric(test.wide.subjects$Ct_N1) < 45 & test.wide.subjects$S2_Spike_Ratio >= 0.002),]
-cor(as.numeric(tester2$Ct_N1),as.numeric(log10(tester2$S2_Spike_Ratio)))^2
+cor(as.numeric(tester2$Ct_N1),as.numeric(log10(tester2$S2_Spike_Ratio)))
 cor.test(as.numeric(tester2$Ct_N1),as.numeric(log10(tester2$S2_Spike_Ratio)))$p.value
 #Swab-Seq40 and Swab-Seq50 (from four for Swab-Seq40 to 10 for Swab-Seq50)
 test.wide.40.subjects = test.wide.40[grep("ASYMPT|SYMPT",test.wide.40$Plate_config),]
 test.wide.40.subjects = test.wide.40.subjects[which(test.wide.40.subjects$S2_Count+test.wide.40.subjects$Spike_Count >= 500),]
 length(which(test.wide.subjects$Ct_N1 == 46 & test.wide.subjects$S2_Spike_Ratio >= 0.002))
 length(which(test.wide.40.subjects$Ct_N1 == 46 & test.wide.40.subjects$S2_Spike_Ratio >= 0.01))
-#Comparing the two Swab-Seq tests directly on subjects, the R2 = 0.96
+#Comparing the two Swab-Seq tests directly on subjects, the Pearson’s r was 0.98
 #(p-value = 5.2x10-40) for samples positive by both
 tester_both = test.wide.both.subjects[which(test.wide.both.subjects$S2_Spike_Ratio >= 0.002 & test.wide.both.subjects$S2_Spike_Ratio_40 >= 0.01),]
 tester_both = tester_both[which(tester_both$S2_Count + tester_both$Spike_Count >= 500 & tester_both$S2_Count_40 + tester_both$Spike_Count_40 >= 500),]
-cor(log10(tester_both$S2_Spike_Ratio),log10(tester_both$S2_Spike_Ratio_40))^2
+cor(log10(tester_both$S2_Spike_Ratio),log10(tester_both$S2_Spike_Ratio_40))
 cor.test(log10(tester_both$S2_Spike_Ratio),log10(tester_both$S2_Spike_Ratio_40))$p.value
 #Swab-Seq50 detected 88% (57/65) of the samples detected as positive with Swab-Seq40
 length(which(test.wide.both.subjects$S2_Spike_Ratio >= 0.002 & test.wide.both.subjects$S2_Spike_Ratio_40 >= 0.01))

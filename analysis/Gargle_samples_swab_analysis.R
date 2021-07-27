@@ -97,16 +97,19 @@ test.wide.reps %>%
 
 dev.off()
 
+#Swab-seq50 positive samples yielded a Pearson's r = -0.75 (p-value = 5.4x10-4)
 tester1 = test.wide.reps[which(as.numeric(test.wide.reps$Ct_N1) < 41 & test.wide.reps$S2_Spike_Ratio >= 0.002),]
-cor(as.numeric(tester1$Ct_N1),as.numeric(log10(tester1$S2_Spike_Ratio)))^2
+cor(as.numeric(tester1$Ct_N1),as.numeric(log10(tester1$S2_Spike_Ratio)))
 cor.test(as.numeric(tester1$Ct_N1),as.numeric(log10(tester1$S2_Spike_Ratio)))$p.value
 
+#and 0.65 (p-value = 1.0x10-4) for replicate sets 1 and 2
 tester2 = test.wide.reps[which(as.numeric(test.wide.reps$Ct_N1) < 41 & test.wide.reps$S2_Spike_Ratio_rep2 >= 0.002),]
-cor(as.numeric(tester2$Ct_N1),as.numeric(log10(tester2$S2_Spike_Ratio_rep2)))^2
+cor(as.numeric(tester2$Ct_N1),as.numeric(log10(tester2$S2_Spike_Ratio_rep2)))
 cor.test(as.numeric(tester2$Ct_N1),as.numeric(tester2$S2_Spike_Ratio_rep2))$p.value
 
+#The Pearson's r was 0.97 (p-value = 2.2x10-12) between Swab-Seq50 replicates.
 tester3 = test.wide.reps[which(test.wide.reps$S2_Spike_Ratio >= 0.002 & test.wide.reps$S2_Spike_Ratio_rep2 >= 0.002),]
-cor(log10(tester3$S2_Spike_Ratio),as.numeric(log10(tester3$S2_Spike_Ratio_rep2)))^2
+cor(log10(tester3$S2_Spike_Ratio),as.numeric(log10(tester3$S2_Spike_Ratio_rep2)))
 cor.test(as.numeric(tester3$S2_Spike_Ratio),as.numeric(tester3$S2_Spike_Ratio_rep2))$p.value
 
 #squares

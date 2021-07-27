@@ -145,29 +145,29 @@ test.wide.subjects %>%
 dev.off()
 
 #The Ct values provided for N1 and N2 were found to be in high correlation
-#(R2 = 0.95, p-value = 4.2x10-38, Fig. 2B)
+#(Pearson's r = 0.97, p-value = 4.2x10-38, Fig. 2B)
 tester = test.wide.subjects[which(as.numeric(test.wide.subjects$Ct_N1) < 45 & test.wide.subjects$Ct_N2 < 45),]
-cor(as.numeric(tester$Ct_N1),as.numeric(tester$Ct_N2))^2
+cor(as.numeric(tester$Ct_N1),as.numeric(tester$Ct_N2))
 cor.test(as.numeric(tester$Ct_N1),as.numeric(tester$Ct_N2))$p.value
 #qRT-PCR Ct values for N1 and Swab-Seq Log10-transformed S2/Spike-in ratios
-#were highly correlated (R2 = 0.92 for samples detectable by both methods,
+#were highly correlated (Pearson's r = -0.96 for samples detectable by both methods,
 #p-vlaue = 1.0x10-34)
 tester2 = test.wide.subjects[which(as.numeric(test.wide.subjects$Ct_N1) < 45 & test.wide.subjects$S2_Spike_Ratio >= 0.01),]
-cor(as.numeric(tester2$Ct_N1),as.numeric(log10(tester2$S2_Spike_Ratio)))^2
+cor(as.numeric(tester2$Ct_N1),as.numeric(log10(tester2$S2_Spike_Ratio)))
 cor.test(as.numeric(tester2$Ct_N1),as.numeric(log10(tester2$S2_Spike_Ratio)))$p.value
 #Ct values for RPP30 (human control gene) were not correlated with the
-#log-transformed Swab-Seq ratio (R2 = 0.002, p-value = 0.50, Fig. S2E)
+#log-transformed Swab-Seq ratio (Pearson's r = -0.04, p-value = 0.50, Fig. S2E)
 tester3 = test.wide.subjects[which(as.numeric(test.wide.subjects$Ct_RPP30) < 45),]
-cor(as.numeric(tester3$Ct_RPP30),as.numeric(log10(tester3$S2_Spike_Ratio)))^2
+cor(as.numeric(tester3$Ct_RPP30),as.numeric(log10(tester3$S2_Spike_Ratio)))
 cor.test(as.numeric(tester3$Ct_RPP30),as.numeric(log10(tester3$S2_Spike_Ratio)))$p.value
 #the correlation of RPP30 counts from the Swab-Seq assay with the Ct value
-#of RPP30 was initially low (R2 = 0.21, p-value = 1.0x10-13, Fig. S2F)
-cor(as.numeric(tester3$Ct_RPP30),as.numeric(log10((tester3$RPP30_Count+1)/(tester3$Spike_Count+1))))^2
+#of RPP30 was initially low (Pearson's r = -0.46, p-value = 1.0x10-13, Fig. S2F)
+cor(as.numeric(tester3$Ct_RPP30),as.numeric(log10((tester3$RPP30_Count+1)/(tester3$Spike_Count+1))))
 cor.test(as.numeric(tester3$Ct_RPP30),as.numeric(log10((tester3$RPP30_Count+1)/(tester3$Spike_Count+1))))$p.value
 #which we utilized as a normalizing factor for both S2 and RPP30 in the
-#Swab-Seq data (R2 = 0.53, p-value = 3.2x10-35, Fig. S2G)
+#Swab-Seq data (Pearson's r = 0.73, p-value = 3.2x10-35, Fig. S2G)
 tester4 = test.wide.subjects[which(as.numeric(test.wide.subjects$Ct_RPP30) < 45 & test.wide.subjects$Spike_Count > 600),]
-cor((tester4$RPP30_Count),as.numeric(log10((tester4$RPP30_Count+1)/(tester4$Spike_Count+1))))^2
+cor((tester4$RPP30_Count),as.numeric(log10((tester4$RPP30_Count+1)/(tester4$Spike_Count+1))))
 cor.test((tester4$RPP30_Count),as.numeric(log10((tester4$RPP30_Count+1)/(tester4$Spike_Count+1))))$p.value
 
 #identifying positive samples at this Ct threshold (65 for N1, 63 for N2,
