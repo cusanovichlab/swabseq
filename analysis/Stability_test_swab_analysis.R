@@ -36,7 +36,7 @@ dev.off()
 test.wide = test[test$target == "spike",]
 s2sub = test[test$target == "S2",]
 test.wide$S2_Count = 0
-test.wide$S2_Count[match(spikesub$Centroid,test.wide$Centroid)] = s2sub$Count
+test.wide$S2_Count[match(s2sub$Centroid,test.wide$Centroid)] = s2sub$Count
 spikesub = test[test$target == "spike",]
 test.wide$Spike_Count = 0
 test.wide$Spike_Count[match(spikesub$Centroid,test.wide$Centroid)] = spikesub$Count
@@ -106,3 +106,31 @@ plot(log10(test.wide$RPP30_Count+1),log10(test.wide$S2_Count+test.wide$Spike_Cou
 abline(v=log10(2),col="red",lty="dashed")
 abline(h=log10(501),col="red",lty="dashed")
 dev.off()
+
+test.wide.nonzero = test.wide.panels[test.wide.panels$ATCC_Virus_copies != 0,]
+test.wide.gargle = test.wide.nonzero[test.wide.nonzero$Saliva_vs_Gargle == "Gargle",]
+test.wide.saliva = test.wide.nonzero[test.wide.nonzero$Saliva_vs_Gargle == "Saliva",]
+test.wide.gargle.rt = test.wide.gargle[test.wide.gargle$Storage_condition == "RT",]
+test.wide.saliva.rt = test.wide.saliva[test.wide.saliva$Storage_condition == "RT",]
+test.wide.gargle.freezer = test.wide.gargle[test.wide.gargle$Storage_condition == "freezer",]
+test.wide.saliva.freezer = test.wide.saliva[test.wide.saliva$Storage_condition == "freezer",]
+
+lrter = function(object,dfs=2){
+  A = logLik(lm(object$S2_Spike_Ratio ~ object$Subjects))
+  B = logLik(lm(object$S2_Spike_Ratio ~ as.numeric(object$Storage_duration) + object$Subjects))
+  teststat <- -2 * (as.numeric(A)-as.numeric(B))
+  p.val <- pchisq(teststat, df = dfs, lower.tail = FALSE)
+  return(p.val)
+}
+
+lrter(test.wide.saliva.freezer)
+#[1] 0.5195341
+
+lrter(test.wide.saliva.rt)
+#[1] 0.9881141
+
+lrter(test.wide.gargle.freezer)
+#[1] 0.09418925
+
+lrter(test.wide.gargle.rt)
+#[1] 0.6468406
